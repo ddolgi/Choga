@@ -1,8 +1,34 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link rel='stylesheet' type='text/css' href='../list.css'>
+	<link rel='stylesheet' type='text/css' href='../choga.css'>
 	<script src="../jquery.min.js"></script>
+<style>
+*
+{
+	font-size:13px;
+	font-family:"malgun Gothic", 맑은 고딕, malgun,Dotum,tahoma,sans-serif;
+	font-style:normal; font-weight:normal;
+}
+
+table.list
+{ 
+	border-collapse:collapse;
+	width:100%;
+	border:1px solid;
+}
+
+.list thead
+{
+	background-color: lightgray;
+}
+
+.list td
+{
+	border:1px solid;
+	padding:3px;
+}
+</style>
 	<style>
 	body,form,table,td{
 		margin:0px;
@@ -27,10 +53,23 @@
 	</style>
 </head>
 <script>
+var param = {};
+
+function View(form) 
+{
+	var songID = form.elements["songID"].value;
+	if(songID == "")
+	{
+		alert("Please input ID");
+		return;
+	}
+	var win = window.open("choga.php?id=" + songID , '_blank');
+	win.focus();
+}
+
 function register(form)
 {
 	var requiredList = ["songID", "title", "musician"];
-	var param = {};
 	for (field in form.elements)
 	{
 		var element = form.elements[field];
@@ -45,11 +84,9 @@ function register(form)
 	}
 
 	$.post('register.php', param, function(response)
-	{ 
-		alert(response);
-		$('#outputHTML').attr('src' , "choga.php?id=" + param.songID );
-	});
+	{ alert(response); });
 }
+
 $(document).ready(function(){
 	var keyList = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", "B"];
 	for(var i in keyList )
@@ -101,13 +138,11 @@ echo ("				Capo  <select name=capo id=capo><option value=\"$capo\">$capo</option
 echo ("			</td>\n");
 echo ("			<td>부제 </td><td><input type=text name=subtitle value='$subtitle' size=30> </td>\n");
 echo ("		</tr><tr>\n");
-echo ("			<td colspan=3> <TEXTAREA name=content cols=80 rows=50>\n$content\n</TEXTAREA> </td>\n");
+echo ("			<td colspan=3> <TEXTAREA name=content cols=100 rows=40>\n$content\n</TEXTAREA> </td>\n");
 ?>
 		</tr> </table>
-</td><td width=50>
 	<INPUT TYPE="button" value='Register' onclick='register(this.form);'>
-</td><td>
-		<iframe class=mainContent id='outputHTML'></iframe>
+	<INPUT TYPE="button" value='View' onclick='View(this.form);'>
 </td></tr></table>
 </form>
 </body>

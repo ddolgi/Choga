@@ -68,6 +68,10 @@ table.phrase
 	vertical-align: top;
 }
 
+table.madi
+{
+	width:100%;
+}
 table.madi td
 {	
 	font-size:12px;
