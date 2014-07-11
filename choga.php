@@ -17,7 +17,7 @@ $id= trim($_GET["id"]);
 //echo "$key|$capo\n";
 
 // Convert TXT to HTML
-$handle = popen("$converter < $id.txt", "r");
+$handle = popen("$converter < $id.choga", "r");
 echo stream_get_contents($handle);
 pclose($handle);
 

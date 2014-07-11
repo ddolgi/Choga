@@ -50,7 +50,7 @@ function PrintItem($line)
 		<td>$nID</td>
 		<td>$musician</td>
 		<td>$title</td>
-		<td width=100>
+		<td>
 			<a href='edit.php?id=$nID' target=_blank><INPUT TYPE='button' value='Edit'></a>
 			<a href='choga.php?id=$nID' target=_blank><INPUT TYPE='button' value='View'></a>
 		</td>

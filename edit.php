@@ -123,7 +123,7 @@ fclose($handle);
 
 if ($content == "")
 {
-	$handle = fopen("../example.txt", "r");
+	$handle = fopen("../template.choga", "r");
 	$content = stream_get_contents($handle);
 	fclose($handle);
 }

@@ -27,7 +27,6 @@ function WriteList( $fileName, $content)
 
 //$now = date("Y-m-d H:i:s");
 $listFile = "list.tsv";
-$converter = "../choga_converter.py";
 
 $nID		= trim($_POST["songID"]);
 $key		= trim($_POST["key"]);
@@ -39,7 +38,19 @@ $content	= trim($_POST["content"]);
 // echo "$nID|$musician|$title|$subtitle|$content";
 //echo "$key|$capo\n";
 
-// Field Format
+// Check ID
+$line = exec("cat $listFile |grep -w '^$nID'");
+if( $line != "" )
+{
+	$tokens = split("\t", $line);
+	if( $tokens[1] != $musician || $tokens[2] != $title )
+	{
+		echo "Failed: Another Song with same ID";
+		exit(-1);
+	}
+}
+
+// Field Meta-Information Format
 if( $subtitle != "") $subtitle = "{subtitle:$subtitle}\n";
 if( $key != "") $key = "{key:$key}\n";
 if( $capo != "") $capo = "{capo:$capo}\n";
@@ -48,7 +59,7 @@ if( $capo != "") $capo = "{capo:$capo}\n";
 if(!WriteList("$nID.txt", "{title:$title}\n$subtitle$key$capo{musician:$musician}\n\n\n$content\n"))
 {
 	echo "Failed to write a text file";
-	exit;
+	exit(-1);
 }
 
 // Delete Old Song with Same ID in List
