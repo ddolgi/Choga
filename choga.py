@@ -88,8 +88,8 @@ def main():
 				print(phrase["comment"]+"<br>")
 				continue
 			if phrase_type == "column":
-				print("</td></tr><tr><td class=choga>")	# 1-column
-				#print("</td><td class=choga>")	# multi-column
+				#print("</td></tr><tr><td class=choga>")	# 1-column
+				print("</td><td class=choga>")	# multi-column
 				continue
 
 		nMadi = len(phrase);
