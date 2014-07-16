@@ -1,4 +1,6 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+<html><head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+	<title>Choga</title>
 	<link rel='stylesheet' type='text/css' href='../choga.css'>
 	<script src="../jquery.min.js"></script>
 	<script src="../choga.js"></script>

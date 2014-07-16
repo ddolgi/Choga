@@ -1,6 +1,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Choga: List</title>
 	<link rel='stylesheet' type='text/css' href='../list.css'>
 	<script src="../jquery.min.js"></script>
 <style>
@@ -52,7 +53,7 @@ function PrintItem($line)
 		<td>$title</td>
 		<td>
 			<a href='edit.php?id=$nID' target=_blank><INPUT TYPE='button' value='Edit'></a>
-			<a href='choga.php?id=$nID' target=_blank><INPUT TYPE='button' value='View'></a>
+			<a href='show.php?id=$nID' target=_blank><INPUT TYPE='button' value='View'></a>
 		</td>
 	</tr>\n";
 }

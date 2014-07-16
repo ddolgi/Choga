@@ -1,6 +1,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Choga: Edit</title>
 	<link rel='stylesheet' type='text/css' href='../choga.css'>
 	<script src="../jquery.min.js"></script>
 <style>
@@ -63,7 +64,7 @@ function View(form)
 		alert("Please input ID");
 		return;
 	}
-	var win = window.open("choga.php?id=" + songID , '_blank');
+	var win = window.open("show.php?id=" + songID , '_blank');
 	win.focus();
 }
 
@@ -104,29 +105,27 @@ $(document).ready(function(){
 <?php
 $id = trim($_GET["id"]);
 //$id="50";
-$handle = fopen("$id.choga", "r");
-
-while($line = fgets($handle))
+if($id != "")
 {
-	if( $line[0]!= '{' )	break;
-	$field = strtok(trim($line, " \t\n{}"), ":");
-	$value = strtok(":");
+	$handle = fopen("$id.choga", "r");
+	while($line = fgets($handle))
+	{
+		if( $line[0]!= '{' )	break;
+		$field = strtok(trim($line, " \t\n{}"), ":");
+		$value = strtok(":");
 
-	if( $field == "title" ) 		$title = $value;
-	else if( $field == "subtitle" ) $subtitle = $value;
-	else if( $field == "musician" ) $musician = $value;
-	else if( $field == "key" ) 		$key = $value;
-	else if( $field == "capo" ) 	$capo = $value;
+		if( $field == "title" ) 		$title = $value;
+		else if( $field == "subtitle" ) $subtitle = $value;
+		else if( $field == "musician" ) $musician = $value;
+		else if( $field == "key" ) 		$key = $value;
+		else if( $field == "capo" ) 	$capo = $value;
+	}
 }
+else
+	$handle = fopen("../template.choga", "r");
+
 $content = stream_get_contents($handle);
 fclose($handle);
-
-if ($content == "")
-{
-	$handle = fopen("../template.choga", "r");
-	$content = stream_get_contents($handle);
-	fclose($handle);
-}
 
 echo ("				ID <input type=text name=songID value='$id' size=5>\n");
 echo ("				음악가 <input type=text name=musician value='$musician'  size=15></td>\n");
