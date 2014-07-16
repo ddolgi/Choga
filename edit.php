@@ -128,7 +128,7 @@ $content = stream_get_contents($handle);
 fclose($handle);
 
 echo ("				ID <input type=text name=songID value='$id' size=5>\n");
-echo ("				음악가 <input type=text name=musician value='$musician'  size=15></td>\n");
+echo ("				음악가 <input type=text name=musician value=\"$musician\"  size=15></td>\n");
 echo ("			<td>제목 </td><td><input type=text name=title value='$title' size=30></td></tr>\n");
 echo ("		</tr><tr>\n");
 echo ("			<td>\n");
