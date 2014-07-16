@@ -104,7 +104,7 @@ $(document).ready(function(){
 <?php
 $id = trim($_GET["id"]);
 //$id="50";
-$handle = fopen("$id.txt", "r");
+$handle = fopen("$id.choga", "r");
 
 while($line = fgets($handle))
 {

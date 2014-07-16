@@ -56,7 +56,7 @@ if( $key != "") $key = "{key:$key}\n";
 if( $capo != "") $capo = "{capo:$capo}\n";
 
 // Make TXT
-if(!WriteList("$nID.txt", "{title:$title}\n$subtitle$key$capo{musician:$musician}\n\n\n$content\n"))
+if(!WriteList("$nID.choga", "{title:$title}\n$subtitle$key$capo{musician:$musician}\n\n\n$content\n"))
 {
 	echo "Failed to write a text file";
 	exit(-1);
