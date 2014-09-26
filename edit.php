@@ -4,6 +4,31 @@
 	<title>Choga: Edit</title>
 	<link rel='stylesheet' type='text/css' href='../choga.css'>
 	<script src="../jquery.min.js"></script>
+	<script>
+		function merge(form)
+		{
+			output = "";
+			chord_madis = form.chord.value.split('\n');
+			lyric_madis = form.lyric.value.split('\n');
+			max_madis = Math.max(chord_madis.length, lyric_madis.length); 
+			for(i=0;i<max_madis;++i)
+			{
+				chord_pieces = chord_madis[i]?chord_madis[i].split('|'):[];
+				lyric_pieces = lyric_madis[i]?lyric_madis[i].split('|'):[];
+				max_pieces = Math.max(chord_pieces.length, lyric_pieces.length); 
+				for(j=0;j<max_pieces;++j)
+				{
+					output += "[";
+					output += chord_pieces[j]?chord_pieces[j]:"";
+					output += "]";
+					output += lyric_pieces[j]?lyric_pieces[j]:"";
+				}
+				output += "|";
+			}
+			form.content.value+=output+'\n';
+			//alert(output);
+		}
+	</script>
 <style>
 *
 {
@@ -136,8 +161,14 @@ echo ("		   		Key  <select name=key id=key><option value=\"$key\">$key</option><
 echo ("				Capo  <select name=capo id=capo><option value=\"$capo\">$capo</option></select>\n");
 echo ("			</td>\n");
 echo ("			<td>부제 </td><td><input type=text name=subtitle value='$subtitle' size=30> </td>\n");
-echo ("		</tr><tr>\n");
-echo ("			<td colspan=3> <TEXTAREA name=content cols=100 rows=40>\n$content\n</TEXTAREA> </td>\n");
+echo ("		</tr><tr><td colspan=3 align=center>\n");
+echo ("			<table><tr>\n");
+echo ("				<td>Chord<br><TEXTAREA name=chord cols=10 rows=8></TEXTAREA></td>\n");
+echo ("				<td>Lyric<br><TEXTAREA name=lyric cols=85 rows=8></TEXTAREA></td>\n");
+echo ("			</td></tr></table>");
+echo (" 		<INPUT TYPE=button value='Merge & Append' onclick='merge(this.form);'>\n");
+echo ("		</td></tr><tr>\n");
+echo ("			<td colspan=3> <TEXTAREA id=content name=content cols=100 rows=30>\n$content\n</TEXTAREA> </td>\n");
 ?>
 		</tr> </table>
 	<INPUT TYPE="button" value='Register' onclick='register(this.form);'>

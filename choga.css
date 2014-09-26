@@ -64,7 +64,7 @@ table.phrase
 .phrase td
 {
 	border:1px solid;
-	padding:0px;
+	padding:1px;
 	vertical-align: top;
 }
 
@@ -77,5 +77,5 @@ table.madi td
 	font-size:12px;
 	padding: 2px;
 	margin: 0px;
-	border: none;
+	border: 0px;
 }

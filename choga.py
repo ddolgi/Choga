@@ -103,9 +103,9 @@ def main():
 			for piece in madi:
 				#print("	<td> %s</td>"% piece["lyric"],end="")
 				if piece["chord"] == "" :
-					print "	<td align=right> %s &nbsp;</td>"% piece["lyric"],
+					print "	<td align=right class=lyric>&nbsp;%s</td>"% piece["lyric"],
 				else:
-					print "	<td> %s &nbsp;</td>"% piece["lyric"],
+					print "	<td class=lyric>%s&nbsp;</td>"% piece["lyric"],
 			print("\n</tr></table></td>") #madi
 		print("</tr></table>") #phrase
 	print("</td></tr></table>") #dadan

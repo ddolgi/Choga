@@ -1,3 +1,7 @@
+var ToggleLyric = function() {
+	$('.lyric').toggle();
+}
+
 var ToggleColumn = function(id) {
 	oldTR = $('#'+id).children().children();
 	var rows = oldTR.length;

@@ -9,6 +9,7 @@
 <button onclick='javascript:ToggleColumn("dadan");'>다단</button>
 <button onclick="javascript:TransposeAll(1);" >#</button>
 <button onclick="javascript:TransposeAll(-1);" >b</button>
+<button onclick="javascript:ToggleLyric();" >Lyric</button>
 <?php
 
 $converter = "../choga.py";
