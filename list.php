@@ -3,6 +3,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>Choga: List</title>
 	<link rel='stylesheet' type='text/css' href='../list.css'>
+	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height">
 	<script src="../jquery.min.js"></script>
 <style>
 *
@@ -51,10 +52,9 @@ function PrintItem($line)
 		<td>$nID</td>
 		<td>$musician</td>
 		<td>$title</td>
-		<td>
-			<a href='edit.php?id=$nID' target=_blank><INPUT TYPE='button' value='Edit'></a>
-			<a href='show.php?id=$nID' target=_blank><INPUT TYPE='button' value='View'></a>
-		</td>
+		<td>";
+	if(strpos($_SERVER['HTTP_USER_AGENT'], "iPhone") === false) echo "<a href='edit.php?id=$nID' target=_blank><INPUT TYPE='button' value='Edit'></a>";
+	echo " <a href='show.php?id=$nID' target=$nID ><INPUT TYPE='button' value='View'></a> </td>
 	</tr>\n";
 }
 
@@ -65,9 +65,9 @@ $handle = fopen("$listFile", "r");
 while($line = fgets($handle))
 	PrintItem($line);
 pclose($handle);
+#echo $_SERVER['HTTP_USER_AGENT'];
 ?>
 	</table>
-
 </body>
 </html>
 

@@ -89,7 +89,7 @@ function View(form)
 		alert("Please input ID");
 		return;
 	}
-	var win = window.open("show.php?id=" + songID , '_blank');
+	var win = window.open("show.php?id=" + songID , songID);
 	win.focus();
 }
 
