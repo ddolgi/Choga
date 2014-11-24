@@ -26,7 +26,7 @@ function WriteList( $fileName, $content)
 }
 
 //$now = date("Y-m-d H:i:s");
-$listFile = "list.tsv";
+$listFile = "data/list.tsv";
 
 $nID		= trim($_POST["songID"]);
 $key		= trim($_POST["key"]);

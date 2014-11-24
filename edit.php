@@ -134,8 +134,9 @@ function GetUserName() {
 	return $tokens[count($tokens) -2];
 }
 
+$list_file="data/list.tsv";
 $id = trim($_GET["id"]);
-$user = trim(shell_exec("grep -w $id list.tsv | cut -f2"));
+$user = trim(shell_exec("grep -w $id $list_file | cut -f2"));
 if($user != GetUserName())
 {
 	echo "Authorization Error";

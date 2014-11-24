@@ -65,7 +65,7 @@ function PrintItem($line, $userName)
 }
 
 
-$listFile	= "list.tsv";
+$listFile	= "data/list.tsv";
 $user = GetUserName();
 
 $handle = fopen("$listFile", "r");
