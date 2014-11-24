@@ -43,32 +43,42 @@ $line = exec("cat $listFile |grep -w '^$nID'");
 if( $line != "" )
 {
 	$tokens = split("\t", $line);
-	if( $tokens[1] != $musician || $tokens[2] != $title )
+	if( $tokens[2] != $musician || $tokens[3] != $title )
 	{
 		echo "Failed: Another Song with same ID";
 		exit(-1);
 	}
 }
 
+//function GetUserName() {
+	//$uri = trim($_SERVER["REQUEST_URI"], '/');
+	//return substr($uri, strrpos($uri, "/")+1);
+//}
+function GetUserName() {
+	$uri = $_SERVER["REQUEST_URI"];
+	$tokens = explode('/', $uri);
+	return $tokens[count($tokens) -2];
+}
+
+$user = GetUserName();
 // Field Meta-Information Format
 if( $subtitle != "") $subtitle = "{subtitle:$subtitle}\n";
 if( $key != "") $key = "{key:$key}\n";
 if( $capo != "") $capo = "{capo:$capo}\n";
 
 // Make TXT
-if(!WriteList("$nID.choga", "{title:$title}\n$subtitle$key$capo{musician:$musician}\n\n\n$content\n"))
+if(!WriteList("data/$nID.choga", "{title:$title}\n$subtitle$key$capo{musician:$musician}\n\n\n$content\n"))
 {
 	echo "Failed to write a text file";
 	exit(-1);
 }
 
-// Delete Old Song with Same ID in List
-exec("awk -vid=$nID '{if($1!=id)print;}' $listFile > .temp ; mv .temp $listFile");
-
-// Append New Song in List
-$cmd = "echo \"$nID\t$musician\t$title\" >> $listFile";
-//echo "$cmd<br>";
-exec($cmd);
+if( "" == trim(exec("grep -w '^$nID' $listFile"))) 
+{
+	$cmd = "echo \"$nID\t$user\t$musician\t$title\" >> $listFile";
+	//echo "$cmd<br>";
+	exec($cmd);
+}
 
 echo "$musician - $title Saved.";
 

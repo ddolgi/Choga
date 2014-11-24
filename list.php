@@ -39,31 +39,38 @@ table.list
 		<td> ID </td>
 		<td> 음악가 </td>
 		<td> 제목 </td>
-		<td><a href="edit.php" target=_blank> <INPUT TYPE='button' value='New'></a> </td>
+		<td align=right><a href="edit.php" target=_blank> <INPUT TYPE='button' value='New'></a> </td>
 	</thead>
 <?php
 
-function PrintItem($line)
+function GetUserName() {
+	$uri = trim($_SERVER["REQUEST_URI"], '/');
+	return substr($uri, strrpos($uri, "/")+1);
+}
+
+function PrintItem($line, $userName)
 {
 	if ( $line == "") return;
-	list($nID, $musician, $title) = split('	', $line);
+	list($nID, $user, $musician, $title) = split('	', $line);
 
 	echo "<tr>
 		<td>$nID</td>
 		<td>$musician</td>
 		<td>$title</td>
-		<td>";
-	if(strpos($_SERVER['HTTP_USER_AGENT'], "iPhone") === false) echo "<a href='edit.php?id=$nID' target=_blank><INPUT TYPE='button' value='Edit'></a>";
-	echo " <a href='show.php?id=$nID' target=$nID ><INPUT TYPE='button' value='View'></a> </td>
+		<td align=right>";
+	if(strpos($_SERVER['HTTP_USER_AGENT'], "iPhone") === false && $user == $userName ) 
+		echo "<a href='edit.php?id=$nID' target=_blank><INPUT TYPE='button' value='Edit'></a>";
+	echo " <a href='view.php?id=$nID' target=$nID ><INPUT TYPE='button' value='View'></a> </td>
 	</tr>\n";
 }
 
 
 $listFile	= "list.tsv";
+$user = GetUserName();
 
 $handle = fopen("$listFile", "r");
 while($line = fgets($handle))
-	PrintItem($line);
+	PrintItem($line, $user);
 pclose($handle);
 #echo $_SERVER['HTTP_USER_AGENT'];
 ?>

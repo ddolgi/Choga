@@ -93,7 +93,7 @@ function View(form)
 	win.focus();
 }
 
-function register(form)
+function Save(form)
 {
 	var requiredList = ["songID", "title", "musician"];
 	for (field in form.elements)
@@ -109,7 +109,7 @@ function register(form)
 		param[element.name] = element.value;
 	}
 
-	$.post('register.php', param, function(response)
+	$.post('save.php', param, function(response)
 	{ alert(response); });
 }
 
@@ -128,11 +128,23 @@ $(document).ready(function(){
 		<table class=input> <tr>
 			<td>
 <?php
+function GetUserName() {
+	$uri = $_SERVER["REQUEST_URI"];
+	$tokens = explode('/', $uri);
+	return $tokens[count($tokens) -2];
+}
+
 $id = trim($_GET["id"]);
-//$id="50";
+$user = trim(shell_exec("grep -w $id list.tsv | cut -f2"));
+if($user != GetUserName())
+{
+	echo "Authorization Error";
+	exit(1);
+}
+
 if($id != "")
 {
-	$handle = fopen("$id.choga", "r");
+	$handle = fopen("data/$id.choga", "r");
 	while($line = fgets($handle))
 	{
 		if( $line[0]!= '{' )	break;
@@ -147,7 +159,7 @@ if($id != "")
 	}
 }
 else
-	$handle = fopen("../template.choga", "r");
+	$handle = fopen("template.choga", "r");
 
 $content = stream_get_contents($handle);
 fclose($handle);
@@ -171,7 +183,7 @@ echo ("		</td></tr><tr>\n");
 echo ("			<td colspan=3> <TEXTAREA id=content name=content cols=100 rows=30>\n$content\n</TEXTAREA> </td>\n");
 ?>
 		</tr> </table>
-	<INPUT TYPE="button" value='Register' onclick='register(this.form);'>
+	<INPUT TYPE="button" value='Save' onclick='Save(this.form);'>
 	<INPUT TYPE="button" value='View' onclick='View(this.form);'>
 </td></tr></table>
 </form>

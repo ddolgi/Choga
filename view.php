@@ -12,7 +12,7 @@
 <button onclick="javascript:ToggleLyric();" >Lyric</button>
 <?php
 
-$converter = "../choga.py";
+$converter = "./choga.py";
 
 $id= trim($_GET["id"]);
 
@@ -20,7 +20,7 @@ $id= trim($_GET["id"]);
 //echo "$key|$capo\n";
 
 // Convert TXT to HTML
-$handle = popen("$converter < $id.choga", "r");
+$handle = popen("$converter < data/$id.choga", "r");
 echo stream_get_contents($handle);
 pclose($handle);
 
