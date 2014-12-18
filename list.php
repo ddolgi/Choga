@@ -1,46 +1,44 @@
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>Choga: List</title>
 	<link rel='stylesheet' type='text/css' href='../list.css'>
 	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height">
 	<script src="../jquery.min.js"></script>
 <style>
-*
-{
-	font-size:13px;
-	font-family:"malgun Gothic", 맑은 고딕, malgun,Dotum,tahoma,sans-serif;
-	font-style:normal; font-weight:normal;
-}
+	*
+	{
+		font-size:13px;
+		font-family:"malgun Gothic", 맑은 고딕, malgun,Dotum,tahoma,sans-serif;
+		font-style:normal; font-weight:normal;
+	}
 
-table.list
-{ 
-	border-collapse:collapse;
-	width:100%;
-	border:1px solid;
-}
+	table.list
+	{ 
+		border-collapse:collapse;
+		border:1px solid;
+	}
 
-.list thead
-{
-	background-color: lightgray;
-}
+	.list thead
+	{
+		background-color: lightgray;
+	}
 
-.list td
-{
-	border:1px solid;
-	padding:3px;
-}
+	.list td
+	{
+		border:1px solid;
+		padding:3px;
+	}
 </style>
 </head>
 <body>
-<table> <tr> <td valign=top>
-	<table class=list>
-	<thead>
-		<td> ID </td>
-		<td> 음악가 </td>
-		<td> 제목 </td>
-		<td align=right><a href="edit.php" target=_blank> <INPUT TYPE='button' value='New'></a> </td>
-	</thead>
+<table class=list>
+<thead>
+	<td> ID </td>
+	<td> 음악가 </td>
+	<td> 제목 </td>
+	<td align=right><a href="edit.php" target=_blank> <INPUT TYPE='button' value='New'></a> </td>
+</thead>
 <?php
 
 function GetUserName() {
@@ -54,14 +52,15 @@ function PrintItem($line, $userName)
 	list($nID, $user, $musician, $title) = split('	', $line);
 
 	echo "<tr>
-		<td>$nID</td>
-		<td>$musician</td>
-		<td>$title</td>
-		<td align=right>";
+	<td>$nID</td>
+	<td>$musician</td>
+	<td>$title</td>
+	<td align=right>\n";
 	if(strpos($_SERVER['HTTP_USER_AGENT'], "iPhone") === false && $user == $userName ) 
-		echo "<a href='edit.php?id=$nID' target=_blank><INPUT TYPE='button' value='Edit'></a>";
-	echo " <a href='view.php?id=$nID' target=$nID ><INPUT TYPE='button' value='View'></a> </td>
-	</tr>\n";
+		echo "\t\t<a href='edit.php?id=$nID' target=_blank><INPUT TYPE='button' value='Edit'></a>\n";
+	echo "\t\t<a href='view.php?id=$nID' target=$nID ><INPUT TYPE='button' value='View'></a>\n";
+   	echo "	</td>\n";
+	echo "</tr>\n";
 }
 
 
@@ -70,11 +69,11 @@ $user = GetUserName();
 
 $handle = fopen("$listFile", "r");
 while($line = fgets($handle))
-	PrintItem($line, $user);
+	PrintItem(rtrim($line), $user);
 pclose($handle);
 #echo $_SERVER['HTTP_USER_AGENT'];
 ?>
-	</table>
+</table>
 </body>
 </html>
 

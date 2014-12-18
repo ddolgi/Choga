@@ -1,45 +1,34 @@
 <?php
 
-function WriteList( $fileName, $content)
-{
-	if($content== "") 
-	{
-		echo "no content";
-		return FALSE;
-	}
-
-	$handle = fopen($fileName, 'w');
-	if ($handle === FALSE)
-	{
-		echo "open error";
-		return FALSE;
-	}
-
-	$nWrite = fwrite($handle, $content);
-	fclose($handle);
-	if ($nWrite	=== FALSE)
-	{
-		echo "open error";
- 		return FALSE;
-	}
-	return TRUE;
-}
-
 //$now = date("Y-m-d H:i:s");
 $listFile = "data/list.tsv";
 
-$nID		= trim($_POST["songID"]);
+$id			= trim($_POST["songID"]);
+$original	= trim($_POST["original"]);
 $key		= trim($_POST["key"]);
-$capo		= trim($_POST["capo"]);
 $title		= trim($_POST["title"]);
 $subtitle	= trim($_POST["subtitle"]);
 $musician	= trim($_POST["musician"]);
 $content	= trim($_POST["content"]);
-// echo "$nID|$musician|$title|$subtitle|$content";
-//echo "$key|$capo\n";
+// echo "$id|$musician|$title|$subtitle|$content";
+// echo "$key|$original\n";
+
+function GetUserName() {
+	$uri = $_SERVER["REQUEST_URI"];
+	$tokens = explode('/', $uri);
+	return $tokens[count($tokens) -2];
+}
+
+$userInList = trim(shell_exec("grep -w $id $listFile | cut -f2"));
+$user = GetUserName();
+if($userInList != "" && $userInList != $user)
+{
+	echo "Authorization Error";
+	exit(1);
+}
 
 // Check ID
-$line = exec("cat $listFile |grep -w '^$nID'");
+$line = exec("cat $listFile |grep -w '^$id'");
 if( $line != "" )
 {
 	$tokens = split("\t", $line);
@@ -50,32 +39,33 @@ if( $line != "" )
 	}
 }
 
-//function GetUserName() {
-	//$uri = trim($_SERVER["REQUEST_URI"], '/');
-	//return substr($uri, strrpos($uri, "/")+1);
-//}
-function GetUserName() {
-	$uri = $_SERVER["REQUEST_URI"];
-	$tokens = explode('/', $uri);
-	return $tokens[count($tokens) -2];
+function WriteList( $fileName, $doc)
+{
+	$handle = fopen($fileName, 'w');
+	if ($handle === FALSE) return FALSE;
+
+	$nWrite = fwrite($handle, $doc);
+	fclose($handle);
+	return $nWirte;
 }
 
-$user = GetUserName();
-// Field Meta-Information Format
-if( $subtitle != "") $subtitle = "{subtitle:$subtitle}\n";
-if( $key != "") $key = "{key:$key}\n";
-if( $capo != "") $capo = "{capo:$capo}\n";
+$doc  = "{ \"title\":\"$title\"";
+$doc .= ", \"subtitle\":\"$subtitle\"";
+$doc .= ", \"original\":\"$original\"";
+$doc .= ", \"key\":\"$key\"";
+$doc .= ", \"musician\":\"$musician\"";
+$doc .= "}\n\n$content\n";
 
 // Make TXT
-if(!WriteList("data/$nID.choga", "{title:$title}\n$subtitle$key$capo{musician:$musician}\n\n\n$content\n"))
+if( WriteList("data/$id.choga", $doc) === FALSE)
 {
-	echo "Failed to write a text file";
+	echo "Failed to write a text file.";
 	exit(-1);
 }
 
-if( "" == trim(exec("grep -w '^$nID' $listFile"))) 
+if( "" == trim(exec("grep -w '^$id' $listFile"))) 
 {
-	$cmd = "echo \"$nID\t$user\t$musician\t$title\" >> $listFile";
+	$cmd = "echo \"$id\t$user\t$musician\t$title\" >> $listFile";
 	//echo "$cmd<br>";
 	exec($cmd);
 }
