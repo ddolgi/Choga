@@ -1,10 +1,14 @@
 <html>
 <head>
+	<title>Choga</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>Choga: List</title>
-	<link rel='stylesheet' type='text/css' href='../list.css'>
+	<meta name=”apple-mobile-web-app-capable” content=”yes” />
+	<!--<link rel='stylesheet' type='text/css' href='../list.css'>-->
 	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height">
+	<link rel="apple-touch-icon" href="choga.ico">
+	<link rel="shortcut icon" href="choga.ico">
 	<script src="../jquery.min.js"></script>
+	<script src="instantFilter.js"></script>
 <style>
 	*
 	{
@@ -32,13 +36,14 @@
 </style>
 </head>
 <body>
-<table class=list>
+<table id=tblData class=list>
 <thead>
 	<td> ID </td>
-	<td> 음악가 </td>
-	<td> 제목 </td>
+	<td><input type="text" id="searchMusician" placeholder="음악가" size=10></td>
+	<td><input type="text" id="searchTitle" placeholder="제목" size=10></td>
 	<td align=right><a href="edit.php" target=_blank> <INPUT TYPE='button' value='New'></a> </td>
 </thead>
+
 <?php
 
 function GetUserName() {
@@ -52,9 +57,9 @@ function PrintItem($line, $userName)
 	list($nID, $user, $musician, $title) = split('	', $line);
 
 	echo "<tr>
-	<td>$nID</td>
-	<td>$musician</td>
-	<td>$title</td>
+	<td class='idCell'>$nID</td>
+	<td class='musicianCell'>$musician</td>
+	<td class='titleCell'>$title</td>
 	<td align=right>\n";
 	if(strpos($_SERVER['HTTP_USER_AGENT'], "iPhone") === false && $user == $userName ) 
 		echo "\t\t<a href='edit.php?id=$nID' target=_blank><INPUT TYPE='button' value='Edit'></a>\n";

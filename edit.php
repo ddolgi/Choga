@@ -129,6 +129,7 @@
 <body>
 <form>
 <?php
+
 function GetUserName() {
 	$uri = $_SERVER["REQUEST_URI"];
 	$tokens = explode('/', $uri);
@@ -136,7 +137,8 @@ function GetUserName() {
 }
 
 $list_file="data/list.tsv";
-$id = trim($_GET["id"]);
+//$id = "1";
+$id = trim(get($_GET["id"]));
 $user = trim(shell_exec("grep -w $id $list_file | cut -f2"));
 if($user != "" && $user != GetUserName())
 {
@@ -144,9 +146,28 @@ if($user != "" && $user != GetUserName())
 	exit(1);
 }
 
+
+$musician = "";
+$title = "";
+$subtitle = "";
+$original = "";
+$key = "";
+
+//function get($var, $key) { return array_key_exists($key, $var) ? $var[$key] : ""; }
+function get(&$var, $default="") { return isset($var) ? $var : $default; }
+
 if($id != "")
 {
 	$handle = fopen("data/$id.choga", "r");
+	$header = json_decode(fgets($handle));
+
+	$musician = $header->{'musician'};
+	$title = $header->{'title'};
+	$subtitle = $header->{'subtitle'};
+	$original = $header->{'original'};
+	$key = $header->{'key'};
+	
+	/*
 	while($line = fgets($handle))
 	{
 		if( $line[0]!= '{' )	break;
@@ -158,7 +179,7 @@ if($id != "")
 		else if( $field == "musician" ) $musician = $value;
 		else if( $field == "original" ) $original = $value;
 		else if( $field == "key" ) 		$key = $value;
-	}
+	}*/
 }
 else
 	$handle = fopen("template.choga", "r");
