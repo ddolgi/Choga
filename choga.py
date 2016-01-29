@@ -24,7 +24,9 @@ def ParseLine(line):
 		phrase.append(madi)
 	return phrase
 
-CMT_HEADER = "{comment:"
+bColumn = False
+if len(sys.argv) > 1 and sys.argv[1] == "column":
+	bColumn = True
 
 ### Read Header
 metaInfo = ujson.loads(sys.stdin.readline())
@@ -33,6 +35,7 @@ metaInfo = ujson.loads(sys.stdin.readline())
 ### Read Content
 data = []
 maxMadi = 0
+CMT_HEADER = "{comment:"
 for line in sys.stdin:
 	line = line.strip()
 	if line == "" or line[0]=="#":
@@ -71,8 +74,10 @@ for phrase in data:
 			print(phrase["comment"]+"<br>")
 			continue
 		if phrase_type == "column":
-			print("</td></tr><tr><td class=choga>")	# 1-column
-			#print("</td><td class=choga>")	# multi-column
+			if bColumn:
+				print("</td><td class=choga>")	# multi-column
+			else:
+				print("</td></tr><tr><td class=choga>")	# 1-column
 			continue
 
 	nMadi = len(phrase);

@@ -4,6 +4,8 @@
 	<title>Choga: Edit</title>
 	<link rel='stylesheet' type='text/css' href='../choga.css'>
 	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height">
+	<link rel="apple-touch-icon" href="choga.ico">
+	<link rel="shortcut icon" href="choga.ico">
 	<style>
 		*
 		{
@@ -77,7 +79,6 @@
 
 		function Comment(form, msg)
 		{
-			
 			output = (msg == "다단")? "{column}" : "{comment:" +msg +"}";
 			form.content.value += output +"\n";
 			form.content.focus();
@@ -214,7 +215,7 @@ lyric4'></TEXTAREA></td>
 
 <p><INPUT TYPE=button value='Merge' onclick='merge(this.form);'>
 <?
-$comments=array("전주", "1절", "간주", "2절", "후주", "다단");
+$comments=array("전주", "1절", "후렴", "간주", "2절", "후주", "다단");
 foreach ($comments as $comment)
 	echo ("<INPUT TYPE=button value='$comment' onclick='Comment(this.form, \"$comment\");'>\n");
 ?>

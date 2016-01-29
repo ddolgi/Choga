@@ -7,7 +7,7 @@
 	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height">
 	<link rel="apple-touch-icon" href="choga.ico">
 	<link rel="shortcut icon" href="choga.ico">
-	<script src="../jquery.min.js"></script>
+	<script src="jquery.min.js"></script>
 	<script src="instantFilter.js"></script>
 <style>
 	*

@@ -1,3 +1,7 @@
+var ToggleChord= function() {
+	$('.chord').toggle();
+}
+
 var ToggleLyric = function() {
 	$('.lyric').toggle();
 }
