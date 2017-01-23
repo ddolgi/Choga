@@ -49,7 +49,7 @@
 			height:100%;
 		}
 	</style>
-	<script src="../jquery.min.js"></script>
+	<script src="jquery.min.js"></script>
 	<script>
 		function merge(form)
 		{
@@ -118,6 +118,18 @@
 			win.focus();
 		}
 
+		function changeChord(inField) {
+			var name = inField.name.substring(5);
+			var radioButton = document.getElementById("chord" + name+"btn");
+			radioButton.checked = true;
+		}
+
+		function changeLyric(inField) {
+			var name = inField.name.substring(5);
+			var radioButton = document.getElementById("lyric" + name+"btn");
+			radioButton.checked = true;
+		}
+
 		$(document).ready(function(){
 			var keyList = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", "B"];
 			for(var i in keyList ) {
@@ -131,20 +143,33 @@
 <form>
 <?php
 
-function GetUserName() {
-	$uri = $_SERVER["REQUEST_URI"];
-	$tokens = explode('/', $uri);
-	return $tokens[count($tokens) -2];
+//function get($var, $key) { return array_key_exists($key, $var) ? $var[$key] : ""; }
+function get(&$var, $default) { return isset($var) ? $var : $default; }
+
+function lookup_list($id, $filename)
+{
+	$handle = fopen($filename, "r");
+	$ret = "";
+	while($line = fgets($handle))
+	{
+//		PrintItem(rtrim($line), $user);
+		if ( $line == "" || $line[0]=='#') continue;
+		list($nID, $editor, $musician, $title) = split('	', $line);
+		if ( $nID == $id )
+		{
+			$ret = $editor;
+			break;
+		}
+	}
+	fclose($handle);
+	return $ret;
 }
 
-$list_file="data/list.tsv";
-//$id = "1";
-$id = trim(get($_GET["id"]));
-$user = trim(shell_exec("grep -w $id $list_file | cut -f2"));
-if($user != "" && $user != GetUserName())
+$id = trim(get($_GET["id"], ""));
+$user =  trim(get($_GET["user"], ""));
+if($id != "" && $user != lookup_list($id, "data/list.tsv"))
 {
-	echo "Authorization Error";
-	exit(1);
+	echo "<font color=red>User '$user' cannot save this song.</font><br>\n";
 }
 
 
@@ -153,10 +178,6 @@ $title = "";
 $subtitle = "";
 $original = "";
 $key = "";
-
-//function get($var, $key) { return array_key_exists($key, $var) ? $var[$key] : ""; }
-function get(&$var, $default="") { return isset($var) ? $var : $default; }
-
 if($id != "")
 {
 	$handle = fopen("data/$id.choga", "r");
@@ -167,23 +188,13 @@ if($id != "")
 	$subtitle = $header->{'subtitle'};
 	$original = $header->{'original'};
 	$key = $header->{'key'};
-	
-	/*
-	while($line = fgets($handle))
-	{
-		if( $line[0]!= '{' )	break;
-		$field = strtok(trim($line, " \t\n{}"), ":");
-		$value = strtok(":");
-
-		if( $field == "title" ) 		$title = $value;
-		else if( $field == "subtitle" ) $subtitle = $value;
-		else if( $field == "musician" ) $musician = $value;
-		else if( $field == "original" ) $original = $value;
-		else if( $field == "key" ) 		$key = $value;
-	}*/
 }
 else
-	$handle = fopen("template.choga", "r");
+{
+	$handle = fopen("data/template.choga", "r");
+	echo "<a href='http://ddolgi.pe.kr/choga/edit.php?id=1' target='_blank'>작성 예</a><br>\n";
+	http://ddolgi.pe.kr/choga/edit.php?id=1
+}
 
 $content = stream_get_contents($handle);
 fclose($handle);
@@ -193,27 +204,28 @@ echo ("				<td>ID <input type=text name=songID value='$id' size=5></td>\n");
 echo ("				<td>음악가 <input type=text name=musician value=\"$musician\"  size=15></td>\n");
 echo ("			<td>제목 </td><td><input type=text name=title value='$title' size=30></td></tr>\n");
 echo ("		</tr><tr>\n");
-echo ("				<td>Original<select name=original id=original><option value=\"$original\">$original</option></select></td>\n");
+echo ("				<td>Original <select name=original id=original><option value=\"$original\">$original</option></select></td>\n");
 echo ("		   		<td>Key  <select name=key id=key><option value=\"$key\">$key</option></select></td>\n");
 echo ("			<td>부제 </td><td><input type=text name=subtitle value='$subtitle' size=30> </td>\n");
 echo("</tr></table>\n");
+echo("<input type=hidden id='editor' name='editor' value='$user'>\n");
 ?>
 
 <p>
 <table><tr>
-	<td><input type="radio" name="chord" value="1" checked>Chord 1<br><TEXTAREA name=chord1 cols=10 rows=10 placeholder='c1 | c2
+	<td><input type="radio" name="chord" id="chord1btn" value="1" checked>Chord 1<br><TEXTAREA name=chord1 cols=8 rows=8 placeholder='c1 | c2
 c3
-chord4'></TEXTAREA></td>
-	<td><input type="radio" name="chord" value="2">Chord 2<br><TEXTAREA name=chord2 cols=10 rows=10></TEXTAREA></td>
-	<td><input type="radio" name="chord" value="3">Chord 3<br><TEXTAREA name=chord3 cols=10 rows=10></TEXTAREA></td>
+chord4' onclick="changeChord(this);"></TEXTAREA></td>
+	<td><input type="radio" name="chord" id="chord2btn" value="2">Chord 2<br><TEXTAREA name=chord2 cols=8 rows=8 onclick="changeChord(this);"></TEXTAREA></td>
+	<td><input type="radio" name="chord" id="chord3btn" value="3">Chord 3<br><TEXTAREA name=chord3 cols=8 rows=8 onclick="changeChord(this);"></TEXTAREA></td>
 	<td> + </td>
-	<td><input type="radio" name="lyric" value="1" checked>Lyric 1<br><TEXTAREA name=lyric1 cols=30 rows=10 placeholder='lyric1 | lyric2
+	<td><input type="radio" name="lyric" id="lyric1btn" value="1" checked>Lyric 1<br><TEXTAREA name=lyric1 cols=30 rows=8 placeholder='lyric1 | lyric2
 lyric3
-lyric4'></TEXTAREA></td>
-	<td><input type="radio" name="lyric" value="2">Lyric 2<br><TEXTAREA name=lyric2 cols=30 rows=10></TEXTAREA></td>
+lyric4' onclick="changeLyric(this);"></TEXTAREA></td>
+	<td><input type="radio" name="lyric" id="lyric2btn" value="2">Lyric 2<br><TEXTAREA name=lyric2 cols=30 rows=8 onclick="changeLyric(this);"></TEXTAREA></td>
 </td></tr></table>
 
-<p><INPUT TYPE=button value='Merge' onclick='merge(this.form);'>
+<p><INPUT TYPE=button value='Merge' onclick='merge(this.form);'> &nbsp; &nbsp; &nbsp;
 <?
 $comments=array("전주", "1절", "후렴", "간주", "2절", "후주", "다단");
 foreach ($comments as $comment)
@@ -221,12 +233,14 @@ foreach ($comments as $comment)
 ?>
 <p>
 <?
-echo ("			<TEXTAREA id=content name=content cols=112 rows=30>\n$content\n</TEXTAREA>\n");
+echo ("			<TEXTAREA id=content name=content cols=106 rows=25>\n$content\n</TEXTAREA>\n");
 ?>
 <p>
 <INPUT TYPE="button" value='Save' onclick='Save(this.form);'>
 <INPUT TYPE="button" value='View' onclick='View(this.form);'>
+<INPUT TYPE="button" value='Save & View' onclick='Save(this.form);View(this.form);'>
 </form>
+※ 오른쪽 정렬법: 코드를 비운다. '[]'
 </body>
 </html>
 
