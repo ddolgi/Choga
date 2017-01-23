@@ -10,29 +10,40 @@ $title		= trim($_POST["title"]);
 $subtitle	= trim($_POST["subtitle"]);
 $musician	= trim($_POST["musician"]);
 $content	= trim($_POST["content"]);
+$editor	= trim($_POST["editor"]);
 // echo "$id|$musician|$title|$subtitle|$content";
 // echo "$key|$original\n";
 
-function GetUserName() {
-	$uri = $_SERVER["REQUEST_URI"];
-	$tokens = explode('/', $uri);
-	return $tokens[count($tokens) -2];
+function lookup_list($id, $filename)
+{
+	$handle = fopen($filename, "r");
+	$ret = "";
+	while($line = fgets($handle))
+	{
+//		PrintItem(rtrim($line), $user);
+		if ( $line == "" || $line[0]=='#') continue;
+		list($nID, $editor, $musician, $title) = split('	', $line);
+		if ( $nID == $id )
+		{
+			$ret = $line;
+			break;
+		}
+	}
+	fclose($handle);
+	return $ret;
 }
 
-$userInList = trim(shell_exec("grep -w $id $listFile | cut -f2"));
-$user = GetUserName();
-if($userInList != "" && $userInList != $user)
-{
-	echo "Authorization Error";
-	exit(1);
-}
+$tsv = lookup_list($id, $listFile);
+list($prevID, $prevEditor, $prevMusician, $prevTitle) = split('	', $tsv);
 
-// Check ID
-$line = exec("cat $listFile |grep -w '^$id'");
-if( $line != "" )
+if($prevEditor != "")
 {
-	$tokens = split("\t", $line);
-	if( $tokens[2] != $musician || $tokens[3] != $title )
+	if( $prevEditor != $editor )
+	{
+		echo "Authorization Error: user $editor cannot edit";
+		exit(1);
+	}
+	else if( trim($prevMusician) != $musician || trim($prevTitle) != $title )
 	{
 		echo "Failed: Another Song with same ID";
 		exit(-1);
@@ -54,6 +65,7 @@ $doc .= ", \"subtitle\":\"$subtitle\"";
 $doc .= ", \"original\":\"$original\"";
 $doc .= ", \"key\":\"$key\"";
 $doc .= ", \"musician\":\"$musician\"";
+$doc .= ", \"editor\":\"$editor\"";
 $doc .= "}\n\n$content\n";
 
 // Make TXT
@@ -63,11 +75,13 @@ if( WriteList("data/$id.choga", $doc) === FALSE)
 	exit(-1);
 }
 
-if( "" == trim(exec("grep -w '^$id' $listFile"))) 
+if( $tsv == "" ) 
 {
-	$cmd = "echo \"$id\t$user\t$musician\t$title\" >> $listFile";
-	//echo "$cmd<br>";
-	exec($cmd);
+	$handle = fopen($listFile, 'a');
+	if ($handle === FALSE) return FALSE;
+
+	$nWrite = fwrite($handle, "$id\t$editor\t$musician\t$title\n");
+	fclose($handle);
 }
 
 echo "$musician - $title Saved.";
