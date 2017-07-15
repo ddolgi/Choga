@@ -51,7 +51,7 @@
 	</style>
 	<script src="jquery.min.js"></script>
 	<script>
-		function merge(form)
+		function Merge(form)
 		{
 			output = "";
 
@@ -72,20 +72,12 @@
 				}
 				output += "|";
 			}
-			form.content.value += output+'\n';
-			form.content.focus();
+			form.merged.value = output;
+			//form.content.focus();
 			//alert(output);
 		}
 
-		function Comment(form, msg)
-		{
-			output = (msg == "다단")? "{column}" : "{comment:" +msg +"}";
-			form.content.value += output +"\n";
-			form.content.focus();
-			//alert(output);
-		}
-
-		function Save(form)
+		function Save(form, bAlert)
 		{
 			var param = {};
 			var requiredList = ["songID", "title", "musician"];
@@ -103,7 +95,7 @@
 			}
 
 			$.post('save.php', param, function(response)
-			{ alert(response); });
+			{ if(bAlert) alert(response); });
 		}
 
 		function View(form) 
@@ -211,34 +203,28 @@ echo("</tr></table>\n");
 echo("<input type=hidden id='editor' name='editor' value='$user'>\n");
 ?>
 
-<p>
 <table><tr>
 	<td><input type="radio" name="chord" id="chord1btn" value="1" checked>Chord 1<br><TEXTAREA name=chord1 cols=8 rows=8 placeholder='c1 | c2
 c3
 chord4' onclick="changeChord(this);"></TEXTAREA></td>
 	<td><input type="radio" name="chord" id="chord2btn" value="2">Chord 2<br><TEXTAREA name=chord2 cols=8 rows=8 onclick="changeChord(this);"></TEXTAREA></td>
 	<td><input type="radio" name="chord" id="chord3btn" value="3">Chord 3<br><TEXTAREA name=chord3 cols=8 rows=8 onclick="changeChord(this);"></TEXTAREA></td>
+	<td><input type="radio" name="chord" id="chord4btn" value="4">Chord 4<br><TEXTAREA name=chord4 cols=8 rows=8 onclick="changeChord(this);"></TEXTAREA></td>
 	<td> + </td>
-	<td><input type="radio" name="lyric" id="lyric1btn" value="1" checked>Lyric 1<br><TEXTAREA name=lyric1 cols=30 rows=8 placeholder='lyric1 | lyric2
+	<td><input type="hidden" name="lyric" id="lyric1btn" value="1" checked>Lyric<br><TEXTAREA name=lyric1 cols=52 rows=8 placeholder='lyric1 | lyric2
 lyric3
 lyric4' onclick="changeLyric(this);"></TEXTAREA></td>
-	<td><input type="radio" name="lyric" id="lyric2btn" value="2">Lyric 2<br><TEXTAREA name=lyric2 cols=30 rows=8 onclick="changeLyric(this);"></TEXTAREA></td>
 </td></tr></table>
 
-<p><INPUT TYPE=button value='Merge' onclick='merge(this.form);'> &nbsp; &nbsp; &nbsp;
-<?
-$comments=array("전주", "1절", "후렴", "간주", "2절", "후주", "다단");
-foreach ($comments as $comment)
-	echo ("<INPUT TYPE=button value='$comment' onclick='Comment(this.form, \"$comment\");'>\n");
-?>
+<p><INPUT TYPE=button value='Merge' onclick='Merge(this.form);'> <input type=text name=merged id=merged size=95 disabled>
 <p>
 <?
 echo ("			<TEXTAREA id=content name=content cols=106 rows=25>\n$content\n</TEXTAREA>\n");
 ?>
 <p>
-<INPUT TYPE="button" value='Save' onclick='Save(this.form);'>
+<INPUT TYPE="button" value='Save' onclick='Save(this.form, true);'>
 <INPUT TYPE="button" value='View' onclick='View(this.form);'>
-<INPUT TYPE="button" value='Save & View' onclick='Save(this.form);View(this.form);'>
+<INPUT TYPE="button" value='Save & View' onclick='Save(this.form, false);View(this.form);'>
 </form>
 ※ 오른쪽 정렬법: 코드를 비운다. '[]'
 </body>
