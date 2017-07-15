@@ -47,7 +47,7 @@
 //function get($var, $key) { return array_key_exists($key, $var) ? $var[$key] : ""; }
 function get(&$var, $default) { return isset($var) ? $var : $default; }
 
-$listFile	= "data/list.tsv";
+$listFile = "data/list.tsv";
 $user =  trim(get($_GET["user"], ""));
 
 if($user != "")
@@ -75,7 +75,10 @@ function PrintItem($line, $user)
 }
 
 $handle = fopen($listFile, "r");
+$songs = array();
 while($line = fgets($handle))
+	array_push($songs, $line);
+foreach(array_reverse($songs) as $line)
 	PrintItem(rtrim($line), $user);
 fclose($handle);
 #echo $_SERVER['HTTP_USER_AGENT'];
