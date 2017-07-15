@@ -123,6 +123,8 @@ foreach($lines as $line)
 		}
 		continue;
 	}
+	elseif(sizeof($line) == 1 && $line[0][0]["chord"] === "")
+		echo $line[0][0]["lyric"]."<br>";
 	else
 	{
 		$nMadi = sizeof($line);
