@@ -184,8 +184,8 @@ if($id != "")
 else
 {
 	$handle = fopen("data/template.choga", "r");
+	$id = rand(1000,9999);
 	echo "<a href='http://ddolgi.pe.kr/choga/edit.php?id=1' target='_blank'>작성 예</a><br>\n";
-	http://ddolgi.pe.kr/choga/edit.php?id=1
 }
 
 $content = stream_get_contents($handle);

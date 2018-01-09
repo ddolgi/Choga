@@ -10,11 +10,12 @@
 	<title>Choga</title>
 </head>
 <body>
-<button onclick='javascript:ToggleColumn("dadan");'>다단</button>
+<a href='index.php'><INPUT TYPE='button' value='목록'></a>
 <button onclick="javascript:TransposeAll(1);" >#</button>
 <button onclick="javascript:TransposeAll(-1);" >b</button>
 <button onclick="javascript:ToggleChord();" >Chord</button>
 <button onclick="javascript:ToggleLyric();" >Lyric</button>
+<button onclick='javascript:ToggleColumn("dadan");'>다단</button>
 <?php
 
 $id= trim($_GET["id"]);
@@ -112,7 +113,7 @@ foreach($lines as $line)
 //		echo "<br>$phrase_type<br>\n";
 		if($line_type == "comment")
 		{
-			echo $line["text"]."<br>";
+			echo "<font color=red>".$line["text"]."</font><br>";
 		}
 		else if($line_type == "column")
 		{
@@ -124,7 +125,7 @@ foreach($lines as $line)
 		continue;
 	}
 	elseif(sizeof($line) == 1 && $line[0][0]["chord"] === "")
-		echo $line[0][0]["lyric"]."<br>";
+		echo " ".$line[0][0]["lyric"]."<br>";
 	else
 	{
 		$nMadi = sizeof($line);

@@ -60,7 +60,7 @@ echo "</td>
 function PrintItem($line, $user)
 {
 	if ( $line == "" || $line[0]=='#') return;
-	list($nID, $editor, $musician, $title) = split('	', $line);
+	list($nID, $editor, $musician, $title) = explode('	', $line);
 
 	echo "<tr>
 	<td class='idCell'>$nID</td>

@@ -14,7 +14,7 @@ $editor	= trim($_POST["editor"]);
 // echo "$id|$musician|$title|$subtitle|$content";
 // echo "$key|$original\n";
 
-function lookup_list($id, $filename)
+function LookupList($id, $filename)
 {
 	$handle = fopen($filename, "r");
 	$ret = "";
@@ -22,7 +22,7 @@ function lookup_list($id, $filename)
 	{
 //		PrintItem(rtrim($line), $user);
 		if ( $line == "" || $line[0]=='#') continue;
-		list($nID, $editor, $musician, $title) = split('	', $line);
+		list($nID, $editor, $musician, $title) = explode('\t', $line);
 		if ( $nID == $id )
 		{
 			$ret = $line;
@@ -33,9 +33,8 @@ function lookup_list($id, $filename)
 	return $ret;
 }
 
-$tsv = lookup_list($id, $listFile);
-list($prevID, $prevEditor, $prevMusician, $prevTitle) = split('	', $tsv);
-
+$tsv = LookupList($id, $listFile);
+list($prevID, $prevEditor, $prevMusician, $prevTitle) = explode('\t', $tsv);
 if($prevEditor != "")
 {
 	if( $prevEditor != $editor )
@@ -50,7 +49,7 @@ if($prevEditor != "")
 	}
 }
 
-function WriteList( $fileName, $doc)
+function WriteSong($fileName, $doc)
 {
 	$handle = fopen($fileName, 'w');
 	if ($handle === FALSE) return FALSE;
@@ -69,7 +68,7 @@ $doc .= ", \"editor\":\"$editor\"";
 $doc .= "}\n\n$content\n";
 
 // Make TXT
-if( WriteList("data/$id.choga", $doc) === FALSE)
+if( WriteSong("data/$id.choga", $doc) === FALSE)
 {
 	echo "Failed to write a text file.";
 	exit(-1);
