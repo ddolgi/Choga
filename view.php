@@ -7,18 +7,20 @@
 	<link rel="shortcut icon" href="choga.ico">
 	<script src="jquery.min.js"></script>
 	<script src="choga.js"></script>
-	<title>Choga</title>
+<?php
+$id= trim($_GET["id"]);
+$handle = fopen("data/$id.choga", "r");
+$metaInfo = json_decode(fgets($handle));
+
+echo "<title>Choga: $metaInfo->musician - $metaInfo->title</title>
 </head>
 <body>
 <a href='index.php'><INPUT TYPE='button' value='목록'></a>
-<button onclick="javascript:TransposeAll(1);" >#</button>
-<button onclick="javascript:TransposeAll(-1);" >b</button>
-<button onclick="javascript:ToggleChord();" >Chord</button>
-<button onclick="javascript:ToggleLyric();" >Lyric</button>
-<button onclick='javascript:ToggleColumn("dadan");'>다단</button>
-<?php
-
-$id= trim($_GET["id"]);
+<button onclick=\"javascript:TransposeAll(1);\" >#</button>
+<button onclick=\"javascript:TransposeAll(-1);\" >b</button>
+<button onclick=\"javascript:ToggleChord();\" >Chord</button>
+<button onclick=\"javascript:ToggleLyric();\" >Lyric</button>
+<button onclick='javascript:ToggleColumn(\"dadan\");'>다단</button>";
 
 if(strpos($_SERVER['HTTP_USER_AGENT'], "iPhone") === false ) 
 	$bColumn = TRUE;
@@ -56,9 +58,6 @@ function array_key_valid($key, $a)
 }
 
 $cmt_header = "{c";
-
-$handle = fopen("data/$id.choga", "r");
-$metaInfo = json_decode(fgets($handle));
 
 $maxMadi = 0;
 $lines = array();
